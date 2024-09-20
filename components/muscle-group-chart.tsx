@@ -28,6 +28,13 @@ const chartConfig = {
   },
 } satisfies ChartConfig
 
+interface GroupedData {
+  [date: string]: {
+    date: string;
+    netWeight: number;
+  };
+}
+
 const MuscleGroupCharts = () => {
   const [selectedMuscle, setSelectedMuscle] = useState('All');
   const { data: gymData, error, isLoading } = useGetExercises();
@@ -42,7 +49,8 @@ const MuscleGroupCharts = () => {
   console.log(muscleFrequencyData);
   const processedData = useMemo(() => {
     if (!gymData) return [];
-    const groupedData = gymData.reduce((acc, entry) => {
+    
+    const groupedData: GroupedData = gymData.reduce((acc: GroupedData, entry) => {
       if (entry.muscle === selectedMuscle) {
         const date = entry.date.split('T')[0];
         const netWeight = entry.sets * entry.reps * entry.weight;
@@ -53,7 +61,7 @@ const MuscleGroupCharts = () => {
       }
       return acc;
     }, {});
-    
+  
     return Object.values(groupedData).sort((a, b) => Date.parse(a.date) - Date.parse(b.date));
   }, [gymData, selectedMuscle]);
 

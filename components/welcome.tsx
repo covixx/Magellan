@@ -41,7 +41,7 @@
                   </Button>
               </div>
               <p className="text-sm font-extralight">
-                  Here's the agenda for today.
+                  Here is the agenda for today.
               </p>
           </div>
       );
