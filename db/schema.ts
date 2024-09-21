@@ -1,7 +1,8 @@
 import { date } from "drizzle-orm/mysql-core";
 import { timestamp } from "drizzle-orm/pg-core";
 import {z} from "zod";
-import { integer, pgTable, text } from "drizzle-orm/pg-core";
+import { json } from "drizzle-orm/pg-core";
+import { integer, pgTable, text, serial, boolean, uniqueIndex } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 export const todo = pgTable("todo", {
     id: text("id").primaryKey(),
@@ -43,3 +44,12 @@ export const lockingin = pgTable("lockingin", {
 });
 
 export const insertlockingschema = createInsertSchema(lockingin);
+
+export const habits = pgTable("habits", {
+    id: text("id").primaryKey(),
+    name: text("name").notNull(),
+    userId: text("user_id").notNull(),
+    days: json("days").default([]).notNull(),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+  });
+export const inserthabitsschema = createInsertSchema(habits);

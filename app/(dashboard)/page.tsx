@@ -6,8 +6,9 @@ import { useSwitch } from "@/app/switch-context";
 import { useRouter } from 'next/navigation';
 import { useGetLockingInData } from "@/features/lockingin/use-get-lockingin";
 import { Component as ChartComponent } from "@/components/lockedin-chart";
-import { CalorieChart } from "@/components/calorie-chart";
+import { NutritionRadialChart } from "@/components/calorie-chart";
 import MuscleGroupCharts from "@/components/muscle-group-chart";
+import TodayHabits from '@/components/habits-chart';
 
 export default function Home() {
   const router = useRouter();
@@ -45,9 +46,11 @@ export default function Home() {
 
       {/* Calorie Chart positioned on the middle right */}
       <div className="absolute right-8 top-48 transform -translate-y-1/2">
-        <CalorieChart />
+        <NutritionRadialChart />
       </div>
-
+      <div className="absolute left-8 bottom-56 h-80 w-72">
+        <TodayHabits />
+      </div>
       {/* Lock In switch centered at the bottom */}
       <div className="absolute bottom-80 left-1/2 transform -translate-x-1/2 flex items-center">
         <Switch id="lock-in" checked={isSwitchOn} onClick={handleSwitchChange} />
@@ -55,6 +58,7 @@ export default function Home() {
           Lock In
         </Label>
       </div>
+      
     </div>
   );
 }

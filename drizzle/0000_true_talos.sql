@@ -8,6 +8,14 @@ CREATE TABLE IF NOT EXISTS "gym" (
 	"muscle" text NOT NULL
 );
 --> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "habits" (
+	"id" text PRIMARY KEY NOT NULL,
+	"name" text NOT NULL,
+	"user_id" text NOT NULL,
+	"days" json DEFAULT '[]'::json NOT NULL,
+	"created_at" timestamp DEFAULT now() NOT NULL
+);
+--> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "lockingin" (
 	"date" timestamp NOT NULL,
 	"id" text PRIMARY KEY NOT NULL,
