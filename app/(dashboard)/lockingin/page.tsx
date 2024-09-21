@@ -130,7 +130,7 @@ const Lockingin = () => {
   }, [saveFocusTime, isSwitchOn]);
 
   const getSpotifyEmbedUrl = (link: string) => {
-    const playlistId = '4Zoxsc06EUHRf5GrJPJZ54';
+    const playlistId = '3b5BzPOUyCB2UcQi0NqNTa';
     return playlistId ? `https://open.spotify.com/embed/playlist/${playlistId}?utm_source=generator&theme=0` : '';
   };
 
