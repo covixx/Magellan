@@ -54,7 +54,10 @@ export function NewMealSheet() {
     };
     createMealMutation.mutate(mealInput);
   };
-
+  const uniqueMeals = meals?.slice(0, 100)
+  .filter((meal, index, self) =>
+    index === self.findIndex((m) => m.name === meal.name)
+  );
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
@@ -85,7 +88,8 @@ export function NewMealSheet() {
             <p>Loading previous meals...</p>
           ) : (
             <div className="space-y-2">
-              {meals?.slice(0, 5).map((meal: ApiMeal) => (
+              
+              {uniqueMeals?.map((meal: ApiMeal) => (
                 <Button
                   key={meal.id}
                   onClick={() => handleQuickAdd(meal)}
