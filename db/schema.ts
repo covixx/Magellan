@@ -4,6 +4,7 @@ import {z} from "zod";
 import { json } from "drizzle-orm/pg-core";
 import { integer, pgTable, text, serial, boolean, uniqueIndex } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
+
 export const todo = pgTable("todo", {
     id: text("id").primaryKey(),
     plaidid: text("plaid_id"),
@@ -53,3 +54,16 @@ export const habits = pgTable("habits", {
     createdAt: timestamp("created_at").defaultNow().notNull(),
   });
 export const inserthabitsschema = createInsertSchema(habits);
+
+export const userSettings = pgTable('user_settings', {
+    userId: text('user_id').primaryKey(),
+    spotifyLink: text('spotify_link'),
+    height: integer('height'),
+    weight: integer('weight'),
+    goal: text('goal'),
+    workoutDays: integer('workout_days'),
+    age: integer('age'),
+    maxCalories: integer('max_calories'),
+  });
+
+export const insertsettingschema = createInsertSchema(userSettings);

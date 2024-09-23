@@ -43,10 +43,6 @@ const MealPage = () => {
             <CardTitle className="text-xl line-clamp-1">
                 Nutrition Tracker
             </CardTitle>
-            <Button onClick={newmeal.onOpen} size="sm">
-                <Plus className="size-4 mr-2"/>
-                    Log Meal
-            </Button>
         </CardHeader>
         <CardContent>
             <MealTable columns={columns} data={tasks}/>

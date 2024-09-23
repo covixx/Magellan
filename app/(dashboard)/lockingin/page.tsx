@@ -19,13 +19,14 @@ const wallpapers: Wallpaper[] = [
 ];
 
 const Lockingin = () => {
+  const [spotifyLink, setSpotifyLink] = useState('');
   const router = useRouter();
   const { isSwitchOn, toggleSwitch } = useSwitch();
   const [currentWallpaper, setCurrentWallpaper] = useState<Wallpaper | null>(null);
   const [elapsedTime, setElapsedTime] = useState(0); // Time in seconds
   const startTimeRef = useRef<number | null>(null);
   const timerIntervalRef = useRef<NodeJS.Timeout | null>(null);
-  const [spotifyLink, setSpotifyLink] = useState('');
+  
 
   const saveFocusTime = useCallback(async (minutes: number) => {
     if (minutes <= 0) return; // Don't save if time is 0 or negative
@@ -71,7 +72,19 @@ const Lockingin = () => {
         }
       }, 1000);
     }
+    const fetchUserSettings = async () => {
+      try {
+        const response = await fetch('/api/settings');
+        if (response.ok) {
+          const settings = await response.json();
+          setSpotifyLink(settings.spotifyLink || '');
+        }
+      } catch (error) {
+        console.error('Error fetching user settings:', error);
+      }
+    };
 
+    fetchUserSettings();
     return () => {
       // Cleanup the interval on component unmount
       if (timerIntervalRef.current) {
@@ -130,10 +143,9 @@ const Lockingin = () => {
   }, [saveFocusTime, isSwitchOn]);
 
   const getSpotifyEmbedUrl = (link: string) => {
-    const playlistId = '3b5BzPOUyCB2UcQi0NqNTa';
+    const playlistId = link.split('/').pop();
     return playlistId ? `https://open.spotify.com/embed/playlist/${playlistId}?utm_source=generator&theme=0` : '';
   };
-
   return (
     <div style={{ width: '100%', height: '101vh', overflow: 'hidden', position: 'relative' }}>
       {/* Wallpaper Background */}

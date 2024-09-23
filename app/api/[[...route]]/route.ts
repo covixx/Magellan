@@ -14,7 +14,7 @@ const routes = app
   .route("/gym", gym)
   .route("/habits", habits)
   .route("/lockingin", lockingin)
-  //breaking other routes .route("/settings", settings);
+  .route("/settings", settings);
   
 export const GET = handle(app);
 export const POST = handle(app);

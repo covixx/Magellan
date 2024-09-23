@@ -2,7 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Select } from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { toast } from 'sonner';
 
 const Settings = () => {
   const [spotifyLink, setSpotifyLink] = useState('');
@@ -11,21 +12,69 @@ const Settings = () => {
   const [goal, setGoal] = useState('');
   const [workoutDays, setWorkoutDays] = useState('');
   const [age, setAge] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Load the saved Spotify link when the component mounts
-    const savedLink = localStorage.getItem('spotifyLink');
-    if (savedLink) {
-      setSpotifyLink(savedLink);
-    }
-  }, []);
+    const fetchSettings = async () => {
+      try {
+        const response = await fetch('/api/settings');
+        if (response.ok) {
+          const settings = await response.json();
+          setSpotifyLink(settings.spotifyLink || '');
+          setHeight(settings.height?.toString() || '');
+          setWeight(settings.weight?.toString() || '');
+          setGoal(settings.goal || '');
+          setWorkoutDays(settings.workoutDays?.toString() || '');
+          setAge(settings.age?.toString() || '');
+        } else {
+          throw new Error('Failed to fetch settings');
+        }
+      } catch (error) {
+        console.error('Error fetching settings:', error);
+        toast.error("Failed to update settings");
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    fetchSettings();
+  }, [toast]);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Save the Spotify link to localStorage
-    localStorage.setItem('spotifyLink', spotifyLink);
-    alert('Settings saved!');
+    setIsLoading(true);
+    try {
+      const response = await fetch('/api/settings', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          spotifyLink,
+          height: parseFloat(height),
+          weight: parseFloat(weight),
+          goal,
+          workoutDays: parseInt(workoutDays),
+          age: parseInt(age),
+        }),
+      });
+
+      if (response.ok) {
+        toast.success("Saved settings successfully!");
+      } else {
+        throw new Error('Failed to save settings');
+      }
+    } catch (error) {
+      console.error('Error saving settings:', error);
+      toast.error("Failed to update settings");
+    } finally {
+      setIsLoading(false);
+    }
   };
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="container mx-auto p-4">
@@ -55,7 +104,7 @@ const Settings = () => {
             type="number"
             id="height"
             value={height}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setHeight(e.target.value)}
+            onChange={(e) => setHeight(e.target.value)}
             className="mt-1"
           />
         </div>
@@ -75,15 +124,15 @@ const Settings = () => {
           <label htmlFor="goal" className="block text-sm font-medium text-gray-700">
             Goal
           </label>
-          <Select
-  name="goal"
-  value={goal}
-  onValueChange={(value: string) => setGoal(value)}
->
-  <option value="">Select a goal</option>
-  <option value="mildWeightGain">Mild Weight Gain</option>
-  <option value="weightLoss">Weight Loss</option>
-</Select>
+          <Select value={goal} onValueChange={setGoal}>
+            <SelectTrigger>
+              <SelectValue placeholder="Select a goal" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="mildWeightGain">Mild Weight Gain</SelectItem>
+              <SelectItem value="weightLoss">Weight Loss</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
         <div>
           <label htmlFor="workoutDays" className="block text-sm font-medium text-gray-700">
@@ -110,7 +159,9 @@ const Settings = () => {
           />
         </div>
 
-        <Button type="submit">Save Settings</Button>
+        <Button type="submit" disabled={isLoading}>
+          {isLoading ? 'Saving...' : 'Save Settings'}
+        </Button>
       </form>
     </div>
   );
