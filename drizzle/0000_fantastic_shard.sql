@@ -34,7 +34,18 @@ CREATE TABLE IF NOT EXISTS "nutrition" (
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "todo" (
 	"id" text PRIMARY KEY NOT NULL,
-	"plaid_id" text,
-	"name" text NOT NULL,
+	"created_at" timestamp DEFAULT now() NOT NULL,
+	"content" text NOT NULL,
 	"user_id" text NOT NULL
+);
+--> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "user_settings" (
+	"user_id" text PRIMARY KEY NOT NULL,
+	"spotify_link" text,
+	"height" integer,
+	"weight" integer,
+	"goal" text,
+	"workout_days" integer,
+	"age" integer,
+	"max_calories" integer
 );

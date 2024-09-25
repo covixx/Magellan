@@ -7,8 +7,8 @@ import { createInsertSchema } from "drizzle-zod";
 
 export const todo = pgTable("todo", {
     id: text("id").primaryKey(),
-    plaidid: text("plaid_id"),
-    name: text("name").notNull(),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    content: text("content").notNull(),
     userId: text("user_id").notNull(),
 });
 
