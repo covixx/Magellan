@@ -127,7 +127,7 @@ const { theme, setTheme } = useTheme();
             {uncheckedTasks.map((task, index) => (
               <li
                 key={index}
-                className="flex items-center space-x-3 p-2 bg-inherit rounded-md shadow-md transition-transform transform hover:scale-105"
+                className="flex items-center space-x-3 p-2 bg-inherit rounded-md  transition-transform transform hover:scale-105"
               >
                 <div className="flex-shrink-0">{getIconForTask(task)}</div>
                 <span className={`${theme === 'dark' ? 'text-gray-100' : 'text-gray-800'} font-medium`}>{task}</span>
