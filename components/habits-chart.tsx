@@ -76,7 +76,7 @@ const TodayHabits: React.FC = () => {
   }));
 
   return (
-    <Card className="w-full h-full shadow-lg">
+    <Card className="w-72 h-80 shadow-lg">
       <CardHeader>
         <CardTitle>Today&rsquo;s Habits</CardTitle>
       </CardHeader>

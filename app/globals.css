@@ -4,6 +4,7 @@
 
 @layer base {
   :root {
+    --shadow-color: rgba(25, 25, 112, 0.6);
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
     --card: 0 0% 100%;
@@ -70,6 +71,7 @@
 }
   .dark {
     --checkbox-color: #553a95;
+    --shadow-color: rgba(255, 255, 255, 0.6);
     --background: 0 0% 1%;
     --foreground: 210 40% 98%;
     --card: 222.2 84% 4.9%;
@@ -99,7 +101,29 @@
     -ms-overflow-style: none;  /* IE and Edge */
     scrollbar-width: none;  /* Firefox */
   }
+  .shadow-card {
+    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.3); /* Darker shadow with some spread and blur */
+    padding: 5px; /* Optional padding */
+    border-radius: 10px; /* Smooth border radius for better appearance */
+    background-color: inherit; /* Keeps the card background visible (or adjust to your theme) */
+    transition: box-shadow 0.3s ease; /* Smooth shadow transition effect */
+  }
+  .shadow-card-small {
+    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.3); /* Slightly smaller shadow */
+    padding: 20px; /* Smaller padding for the smaller card */
+    border-radius: 10px; /* Adjust border-radius to match the smaller size */
+    background-color: inherit;
+    /* Reduces the width of the card */
+    transition: box-shadow 0.3s ease;
+  }
   
+  .shadow-card-small:hover {
+    box-shadow: 0 30px 30px var(--shadow-color); /* Shadow on hover */
+  }
+  
+  .shadow-card:hover {
+    box-shadow: 0 30px 30px  var(--shadow-color); /* Slightly stronger shadow on hover */
+  }
   .scrollbar-hide::-webkit-scrollbar {
     display: none;  /* Chrome, Safari and Opera */
   }

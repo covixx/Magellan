@@ -1,5 +1,5 @@
-"use client" 
-import { useEffect } from 'react';
+"use client"
+import React, { useEffect } from 'react';
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { useSwitch } from "@/app/switch-context";
@@ -10,18 +10,14 @@ import { NutritionRadialChart } from "@/components/calorie-chart";
 import MuscleGroupCharts from "@/components/muscle-group-chart";
 import TodayHabits from '@/components/habits-chart';
 import UncheckedTasks from '@/components/pending-tasks';
-import HabitsTracker from './habits/page';
 
-export default function Home() {
+export default function Dashboard() {
   const router = useRouter();
   const { isSwitchOn, toggleSwitch } = useSwitch();
   const { data: timeData, isLoading, error } = useGetLockingInData();
 
   useEffect(() => {
-    // Disable scrolling
     document.body.style.overflow = 'hidden';
-
-    // Clean up on component unmount
     return () => {
       document.body.style.overflow = '';
     };
@@ -35,49 +31,23 @@ export default function Home() {
   };
 
   return (
-    <div className="relative h-screen overflow-hidden">
-      {/* Muscle Group Charts */}
-      <div className="absolute right-8 bottom-56 shadow-lg">
-        <MuscleGroupCharts />
-      </div>
+    <div className="flex p-10 h-[95vh]">
+  {/* Left side: Tasks */}
+  <div className="w-1/2 p-4 pr-4 overflow-y-auto shadow-card-small mr-4 " >
+    <UncheckedTasks />
+  </div>
 
-      {/* Chart positioned on the middle left */}
-      <div className="absolute left-8 top-48 transform -translate-y-1/2">
+  {/* Right side: Charts */}
+  <div className="w-1/2 p-5 overflow-y-auto  shadow-card ml-4 flex items-start">
+  <div className="grid grid-cols-2 gap-9">
+        <MuscleGroupCharts />
+        <NutritionRadialChart />
+        <TodayHabits />
         {isLoading && <p>Loading time data...</p>}
         {error && <p>Error fetching time data: {error.message}</p>}
         {timeData && <ChartComponent data={timeData} />}
       </div>
-
-      {/* Calorie Chart positioned on the middle right */}
-      <div className="absolute right-8 top-48 transform -translate-y-1/2 shadow-lg">
-        <NutritionRadialChart />
-      </div>
-
-      {/* Unchecked Tasks */}
-      <div className='absolute left-[26%] top-48 transform -translate-y-[37.5%] shadow-lg'>
-        <UncheckedTasks />
-      </div>
-
-      {/* Today Habits */}
-      <div className="absolute left-8 bottom-56 h-80 w-72 shadow-lg">
-        <TodayHabits />
-      </div>
-
-      {/* Lock In switch centered at the bottom */}
-      <div className="absolute bottom-80 left-1/2 transform -translate-x-1/2 flex items-center">
-        <Switch
-          id="lock-in"
-          checked={isSwitchOn}
-          onClick={handleSwitchChange}
-          className='shadow-lg'
-        />
-        <Label
-          htmlFor="lock-in"
-          className="ml-2 label-font text-xl font-semibold"
-        >
-          Lock In
-        </Label>
-      </div>
-    </div>
+  </div>
+</div>
   );
 }

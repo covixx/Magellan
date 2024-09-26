@@ -108,36 +108,35 @@ const { theme, setTheme } = useTheme();
 
   if (error) {
     return (
-      <Card className="w-full -ml-14 mr-72 h-[30rem] flex items-center justify-center bg-gradient-to-r from-gray-50 to-gray-100 rounded-lg shadow-lg">
+      <Card className="w-full h-fit flex items-center justify-center bg-gradient-to-r from-gray-50 to-gray-100 rounded-lg shadow-lg">
         <p>Error loading tasks</p>
       </Card>
     );
   }
 
-  return (
-    <Card className= "w-[45vw] h-[27vw] shadow-lg  rounded-lg ">
-      <CardHeader className="text-center py-4">
-      <CardTitle className={`text-2xl ${theme === 'dark' ? 'text-gray-100' : 'text-gray-700'} font-semibold`}>
-      Pending Tasks
+   return (
+    <Card className="w-full h-[72vh] flex flex-col shadow-none border-none ">
+      <CardHeader className="flex-shrink-0">
+        <CardTitle className={`text-2xl ${theme === 'dark' ? 'text-gray-100' : 'text-gray-700'} font-semibold`}>
+          Pending Tasks
         </CardTitle>
       </CardHeader>
-      <CardContent className="overflow-y-auto h-[calc(100%-4rem)] p-4 scrollbar-hide">
+      <CardContent className=" overflow-y-auto p-4 scrollbar-hide">
         {uncheckedTasks.length > 0 ? (
           <ul className="space-y-4">
             {uncheckedTasks.map((task, index) => (
               <li
-              key={index}
-              className="flex items-center space-x-3 p-2 bg-inherit  rounded-md shadow-mdtransition-transform transform hover:scale-105 overflow-y-hidden"
-            >
+                key={index}
+                className="flex items-center space-x-3 p-2 bg-inherit rounded-md shadow-md transition-transform transform hover:scale-105"
+              >
                 <div className="flex-shrink-0">{getIconForTask(task)}</div>
-                <span className="${theme === 'dark' ? 'text-gray-100' : 'text-gray-800'} font-medium">{task}</span>
-                
+                <span className={`${theme === 'dark' ? 'text-gray-100' : 'text-gray-800'} font-medium`}>{task}</span>
               </li>
             ))}
           </ul>
         ) : (
           <p className="text-center text-lg font-medium text-gray-600">
-            You`&apos;`re all wrapped up!
+            You're all wrapped up!
           </p>
         )}
       </CardContent>
