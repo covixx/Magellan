@@ -83,7 +83,7 @@ const TodayHabits: React.FC = () => {
       <CardContent>
         <ul className="space-y-2">
           {todayHabits.map(habit => (
-            <li key={habit.id} className="flex items-center justify-between">
+            <li key={habit.id} className="flex items-center px-4">
               <span>{habit.name}</span>
               <Button
                 variant={habit.done ? "default" : "outline"}

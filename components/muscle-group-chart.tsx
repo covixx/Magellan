@@ -86,10 +86,10 @@ const MuscleGroupCharts = () => {
         <CardTitle className="text-center">{selectedMuscle}</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="flex justify-center space-x-4 mb-2">
+        <div className="flex justify-center space-x-2 px-2 mb-2">
           <button
             onClick={() => setSelectedMuscle('All')}
-            className={`justify-center w-4 h-4 rounded-full transition-all ${
+            className={`justify-center w-3 h-4 rounded-full transition-all ${
               selectedMuscle === 'All'
                 ? 'bg-blue-500 scale-125'
                 : 'bg-gray-300 hover:bg-gray-400'
@@ -100,7 +100,7 @@ const MuscleGroupCharts = () => {
             <button
               key={muscle}
               onClick={() => setSelectedMuscle(muscle)}
-              className={`justify-center w-4 h-4 rounded-full transition-all ${
+              className={`justify-center w-3 h-4 rounded-full transition-all ${
                 selectedMuscle === muscle
                   ? 'bg-blue-500 scale-125'
                   : 'bg-gray-300 hover:bg-gray-400'
