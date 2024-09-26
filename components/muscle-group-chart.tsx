@@ -81,7 +81,7 @@ const MuscleGroupCharts = () => {
   }
 
   return (
-    <Card className="w-72 h-80">
+    <Card className="w-72 h-80 shadow-lg">
       <CardHeader>
         <CardTitle className="text-center">{selectedMuscle}</CardTitle>
       </CardHeader>

@@ -85,7 +85,7 @@ export function NutritionRadialChart() {
   const angle = getAngle(selectedNutrient);
 
   return (
-    <Card className="w-72 h-80">
+    <Card className="w-72 h-80 shadow-lg">
       <CardHeader className="items-center pb-0">
         <CardTitle>Nutrition Tracker</CardTitle>
         <CardDescription>Today</CardDescription>

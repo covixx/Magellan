@@ -72,7 +72,7 @@ export function Component({ data }: { data: { date: string; id: string; time: nu
     : 0;
 
   return (
-    <Card className="w-72 h-80">
+    <Card className="w-72 h-80 shadow-lg ">
       <CardHeader>
         <CardTitle>Weekly Time Chart</CardTitle>
         <CardDescription>Last 7 Days</CardDescription>

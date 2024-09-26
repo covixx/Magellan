@@ -9,6 +9,8 @@ import { Component as ChartComponent } from "@/components/lockedin-chart";
 import { NutritionRadialChart } from "@/components/calorie-chart";
 import MuscleGroupCharts from "@/components/muscle-group-chart";
 import TodayHabits from '@/components/habits-chart';
+import UncheckedTasks from '@/components/pending-tasks';
+import HabitsTracker from './habits/page';
 
 export default function Home() {
   const router = useRouter();
@@ -34,7 +36,7 @@ export default function Home() {
 
   return (
     <div className="relative h-screen overflow-hidden">
-      <div className="absolute right-8 bottom-56">
+      <div className="absolute right-8 bottom-56 shadow-lg">
         <MuscleGroupCharts />
       </div>
       {/* Chart positioned on the middle left */}
@@ -45,15 +47,16 @@ export default function Home() {
       </div>
 
       {/* Calorie Chart positioned on the middle right */}
-      <div className="absolute right-8 top-48 transform -translate-y-1/2">
+      <div className="absolute right-8 top-48 transform -translate-y-1/2 'shadow-lg'">
         <NutritionRadialChart />
       </div>
-      <div className="absolute left-8 bottom-56 h-80 w-72">
-        <TodayHabits />
+      <div className='absolute left-[26%] top-48 transform -translate-y-[37.5%] shadow-lg'><UncheckedTasks/></div>
+      <div className="absolute left-8 bottom-56 h-80 w-72 shadow-lg">
+        <TodayHabits/>
       </div>
       {/* Lock In switch centered at the bottom */}
       <div className="absolute bottom-80 left-1/2 transform -translate-x-1/2 flex items-center">
-        <Switch id="lock-in" checked={isSwitchOn} onClick={handleSwitchChange} />
+        <Switch id="lock-in" checked={isSwitchOn} onClick={handleSwitchChange} className='shadow-lg' />
         <Label htmlFor="lock-in" className="ml-2 label-font text-xl font-semibold">
           Lock In
         </Label>
