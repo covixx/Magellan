@@ -10,7 +10,6 @@ import { NutritionRadialChart } from "@/components/calorie-chart";
 import MuscleGroupCharts from "@/components/muscle-group-chart";
 import TodayHabits from '@/components/habits-chart';
 import UncheckedTasks from '@/components/pending-tasks';
-import HabitsTracker from './habits/page';
 
 export default function Home() {
   const router = useRouter();
@@ -18,10 +17,7 @@ export default function Home() {
   const { data: timeData, isLoading, error } = useGetLockingInData();
 
   useEffect(() => {
-    // Disable scrolling
     document.body.style.overflow = 'hidden';
-
-    // Clean up on component unmount
     return () => {
       document.body.style.overflow = '';
     };
@@ -35,33 +31,44 @@ export default function Home() {
   };
 
   return (
-    <div className="relative h-screen overflow-hidden">
-      <div className="absolute right-8 bottom-56 shadow-lg">
-        <MuscleGroupCharts />
+    <div className="h-screen w-screen bg-gradient-to-br from-gray-100 to-gray-200 p-6">
+      <div className="h-full w-full grid grid-cols-3 grid-rows-3 gap-6">
+        <div className="col-span-1 row-span-2 bg-white rounded-xl shadow-lg p-4">
+          {isLoading && <p>Loading time data...</p>}
+          {error && <p>Error fetching time data: {error.message}</p>}
+          {timeData && <ChartComponent data={timeData} />}
+        </div>
+        
+        <div className="col-span-1 row-span-1 bg-white rounded-xl shadow-lg p-4">
+          <UncheckedTasks />
+        </div>
+        
+        <div className="col-span-1 row-span-2 bg-white rounded-xl shadow-lg p-4">
+          <NutritionRadialChart />
+        </div>
+        
+        <div className="col-span-1 row-span-1 bg-white rounded-xl shadow-lg p-4">
+          <TodayHabits />
+        </div>
+        
+        <div className="col-span-1 row-span-2 bg-white rounded-xl shadow-lg p-4">
+          <MuscleGroupCharts />
+        </div>
+        
+        <div className="col-span-3 flex justify-center items-center">
+          <div className="bg-white px-6 py-3 rounded-full shadow-lg flex items-center space-x-3">
+            <Switch
+              id="lock-in"
+              checked={isSwitchOn}
+              onClick={handleSwitchChange}
+              className="shadow-md"
+            />
+            <Label htmlFor="lock-in" className="text-xl font-semibold text-gray-800">
+              Lock In
+            </Label>
+          </div>
+        </div>
       </div>
-      {/* Chart positioned on the middle left */}
-      <div className="absolute left-8 top-48 transform -translate-y-1/2">
-        {isLoading && <p>Loading time data...</p>}
-        {error && <p>Error fetching time data: {error.message}</p>}
-        {timeData && <ChartComponent data={timeData} />}
-      </div>
-
-      {/* Calorie Chart positioned on the middle right */}
-      <div className="absolute right-8 top-48 transform -translate-y-1/2 'shadow-lg'">
-        <NutritionRadialChart />
-      </div>
-      <div className='absolute left-[26%] top-48 transform -translate-y-[37.5%] shadow-lg'><UncheckedTasks/></div>
-      <div className="absolute left-8 bottom-56 h-80 w-72 shadow-lg">
-        <TodayHabits/>
-      </div>
-      {/* Lock In switch centered at the bottom */}
-      <div className="absolute bottom-80 left-1/2 transform -translate-x-1/2 flex items-center">
-        <Switch id="lock-in" checked={isSwitchOn} onClick={handleSwitchChange} className='shadow-lg' />
-        <Label htmlFor="lock-in" className="ml-2 label-font text-xl font-semibold">
-          Lock In
-        </Label>
-      </div>
-      
     </div>
   );
 }
