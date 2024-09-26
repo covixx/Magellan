@@ -199,11 +199,11 @@ const TasksPage: React.FC = () => {
             <Card className="border-none drop-shadow-sm flex-grow flex flex-col overflow-hidden bg-transparent">
                 <CardHeader className="flex-shrink-0 gap-y-2 lg:flex-row lg:items-stretch lg:justify-between bg-transparent">
                     <CardTitle className="text-xl line-clamp-1">
-                        What's on your mind?
+                        What`&apos;`s on your mind?
                     </CardTitle>
                     <div className="flex gap-2">
                         <Button onClick={handleFetchYesterday} size="sm">
-                            Fetch Yesterday's Notes
+                            Fetch Yesterday`&apos;`s Notes
                         </Button>
                         <Button onClick={handleSaveTask} size="sm" disabled={!editor || editor.isEmpty || createtask.isPending || updatetask.isPending}>
                             {(createtask.isPending || updatetask.isPending) ? <Loader2 className="size-4 mr-2 animate-spin" /> : <Plus className="size-4 mr-2" />}
