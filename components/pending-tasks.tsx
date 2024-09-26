@@ -136,7 +136,7 @@ const { theme, setTheme } = useTheme();
           </ul>
         ) : (
           <p className="text-center text-lg font-medium text-gray-600">
-            You're all wrapped up!
+            You&apos;re all wrapped up!
           </p>
         )}
       </CardContent>
