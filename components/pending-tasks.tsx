@@ -121,7 +121,7 @@ const { theme, setTheme } = useTheme();
       Pending Tasks
         </CardTitle>
       </CardHeader>
-      <CardContent className="overflow-y-auto h-[calc(100%-4rem)] p-4">
+      <CardContent className="overflow-y-auto h-[calc(100%-4rem)] p-4 scrollbar-hide">
         {uncheckedTasks.length > 0 ? (
           <ul className="space-y-4">
             {uncheckedTasks.map((task, index) => (
