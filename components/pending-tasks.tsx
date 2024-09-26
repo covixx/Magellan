@@ -92,7 +92,7 @@ const { theme, setTheme } = useTheme();
         return <Wrench className="text-orange-500" />;
       }
       else if (task.toLowerCase().includes("dashboard")) {
-        return <Monitor className="text-blue-500" />;
+        return <Monitor className="text-blue-500x" />;
       }
       
     return <CheckSquare className="text-gray-600" />;
@@ -115,7 +115,7 @@ const { theme, setTheme } = useTheme();
   }
 
   return (
-    <Card className= "w-[45vw] h-[27vw] shadow-lg bg-inherit rounded-lg ">
+    <Card className= "w-[45vw] h-[27vw] shadow-lg  rounded-lg ">
       <CardHeader className="text-center py-4">
       <CardTitle className={`text-2xl ${theme === 'dark' ? 'text-gray-100' : 'text-gray-700'} font-semibold`}>
       Pending Tasks
