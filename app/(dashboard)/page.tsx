@@ -10,13 +10,13 @@ import { Switch } from '@/components/ui/switch';
 import { useRouter } from 'next/navigation';
 import { useSwitch } from "@/app/switch-context";
 import { Card, CardContent, CardHeader, CardDescription, CardTitle } from '@/components/ui/card';
-
+import { useTheme } from "next-themes";
 export default function Dashboard() {
   const { data: timeData, isLoading, error } = useGetLockingInData();
   const router = useRouter();
   const { isSwitchOn, toggleSwitch } = useSwitch();
   const [mounted, setMounted] = useState(false);
-
+    const { theme } = useTheme();
   const handleSwitchChange = () => {
     toggleSwitch();
     if (!isSwitchOn) {
@@ -80,12 +80,20 @@ export default function Dashboard() {
                 <div className="flex justify-center items-center flex-grow pt-10 ">
                   <Switch id="lock-in" checked={isSwitchOn} onCheckedChange={handleSwitchChange} style={{transform: 'scale(2.0)'}}/>
                 </div>
-                <div className="absolute bottom-0 right-0 w-24 h-24">
-                  <img 
-                    src="/canvas.png"
-                    alt="Manga character" 
-                    className="object-cover w-full h-full"
-                  />
+                <div  className={`absolute ${theme === 'dark' ? 'bottom-0' : '-bottom-3'} right-0 w-24 h-24`}>
+                {
+      theme === 'dark' 
+      ? (<img 
+          src="/test.png"
+          alt="Manga character" 
+          className="object-cover w-full h-full"
+        />)
+      : (<img 
+          src="/canvas.png"
+          alt="Manga character" 
+          className="object-cover w-full h-full"
+        />)
+    }
                 </div>
               </CardContent>
             </Card>

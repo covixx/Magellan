@@ -21,6 +21,7 @@ export const Header = () => {
   const { isSwitchOn, toggleSwitch } = useSwitch();
     const { theme } = useTheme();
     const [mounted, setMounted] = useState(false);
+    
     useEffect(() => {
         setMounted(true);
     }, []);
