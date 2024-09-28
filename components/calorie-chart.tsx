@@ -145,7 +145,7 @@ export function NutritionRadialChart() {
           </RadialBarChart>
         </ChartContainer>
       </CardContent>
-      <CardFooter className="flex-col gap-2 text-sm mt-6">
+      <CardFooter className="flex-col gap-2 text-sm mt-4">
         <div className="flex justify-center space-x-4 mb-2">
           {NUTRIENTS.map((nutrient) => (
             <button

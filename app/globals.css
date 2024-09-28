@@ -66,7 +66,7 @@
 }
 .image {
   max-width: 100%;
-  max-height: 80vh; /* 80% of the viewport height */
+  max-height: 80vh; 
   object-fit: contain;
 }
   .dark {
@@ -98,34 +98,34 @@
     --chart-5: 340 75% 55%;
   }
   .scrollbar-hide {
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
+    -ms-overflow-style: none;
+    scrollbar-width: none; 
   }
   .shadow-card {
-    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.3); /* Darker shadow with some spread and blur */
-    padding: 5px; /* Optional padding */
-    border-radius: 10px; /* Smooth border radius for better appearance */
-    background-color: inherit; /* Keeps the card background visible (or adjust to your theme) */
-    transition: box-shadow 0.3s ease; /* Smooth shadow transition effect */
+    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.3); 
+    padding: 5px;
+    border-radius: 10px; 
+    background-color: inherit; 
+    transition: box-shadow 0.3s ease; 
   }
   .shadow-card-small {
-    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.3); /* Slightly smaller shadow */
-    padding: 20px; /* Smaller padding for the smaller card */
-    border-radius: 10px; /* Adjust border-radius to match the smaller size */
+    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.3);
+    padding: 20px; 
+    border-radius: 10px;
     background-color: inherit;
-    /* Reduces the width of the card */
+    
     transition: box-shadow 0.3s ease;
   }
   
   .shadow-card-small:hover {
-    box-shadow: 0 30px 30px var(--shadow-color); /* Shadow on hover */
+    box-shadow: 0 30px 30px var(--shadow-color); 
   }
   
   .shadow-card:hover {
-    box-shadow: 0 30px 30px  var(--shadow-color); /* Slightly stronger shadow on hover */
+    box-shadow: 0 30px 30px  var(--shadow-color); 
   }
   .scrollbar-hide::-webkit-scrollbar {
-    display: none;  /* Chrome, Safari and Opera */
+    display: none; 
   }
   .centered-div {
     position: absolute;
