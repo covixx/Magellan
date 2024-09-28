@@ -32,10 +32,6 @@ const routes = [
         label: "Nutrition",
     },
     {
-        href: "/finances",
-        label: "Finances",
-    },
-    {
         href: "/settings",
         label: "Settings",
     },

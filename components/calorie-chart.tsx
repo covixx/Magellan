@@ -17,11 +17,12 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { ChartConfig, ChartContainer } from "@/components/ui/chart";
+import { useSettingsData } from '@/features/settings/use-get-settings';
 
-const MAX_CALORIES = 2500;
-const MAX_PROTEIN = 130; // grams
-const MAX_FAT = 85; // grams
-const MAX_CARBS = 320; // grams
+
+
+
+
 const NUTRIENTS: Nutrient[] = ['calories', 'protein', 'fat', 'carbs'];
 const chartConfig = {
   calories: {
@@ -34,6 +35,37 @@ type NutritionData = {
   [key in Nutrient]: number;
 };
 export function NutritionRadialChart() {
+  const { data: settingsData } = useSettingsData();
+  let MAX_CALORIES = 2500;
+
+let MAX_PROTEIN = 130; // 0.8 g per pound of bodyweight 
+let MAX_FAT = 85; // 2.5% of calories 
+let MAX_CARBS = 320; // grams
+if (settingsData && 'data' in settingsData && settingsData.data) {
+  MAX_CALORIES = settingsData?.data?.maxCalories ?? 2500;
+  MAX_PROTEIN = settingsData?.data?.weight ?? 57;
+  
+  switch (settingsData.data.goal) {
+    case 'mildWeightGain':
+      MAX_CALORIES *= 1.1;
+      break;
+    case 'weightGain':
+      MAX_CALORIES *= 1.2;
+      break;
+    case 'weightLoss':
+      MAX_CALORIES *= 0.8;
+      break;
+    case 'mildWeightLoss':
+      MAX_CALORIES *= 0.9;
+      break;
+    default:
+      break;
+  }
+  MAX_PROTEIN = MAX_PROTEIN * 2.2 * 0.8;
+  MAX_FAT = MAX_CALORIES * 0.034;
+  MAX_CARBS = MAX_CALORIES * 0.125;
+}
+  
   const { data: meals, isLoading, error } = useGetMeals();
   const [selectedNutrient, setSelectedNutrient] = useState<Nutrient>('calories');
 

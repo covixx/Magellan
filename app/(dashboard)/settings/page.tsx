@@ -1,79 +1,95 @@
-"use client";
+"use client"
 import React, { useState, useEffect } from 'react';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Loader2 } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { toast } from 'sonner';
+import { toast } from "sonner";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { useSettingsData } from '@/features/settings/use-get-settings';
+import { useUpdateSettings } from '@/features/settings/use-update-settings';
 
-const Settings = () => {
-  const [spotifyLink, setSpotifyLink] = useState('');
-  const [height, setHeight] = useState('');
-  const [weight, setWeight] = useState('');
-  const [goal, setGoal] = useState('');
-  const [workoutDays, setWorkoutDays] = useState('');
-  const [age, setAge] = useState('');
-  const [isLoading, setIsLoading] = useState(true);
+type Goal = "mildWeightGain" | "weightLoss" | "maintainWeight" | "mildWeightLoss" | "weightGain";
+
+type FormData = {
+  spotifyLink: string;
+  height: number | 0;
+  weight: number | 0;
+  goal: Goal;
+  workoutDays: number | 0;
+  age: number | 0;
+};
+
+const Settings: React.FC = () => {
+  const { data: settingsData, isLoading } = useSettingsData();
+  const updateSettings = useUpdateSettings();
+
+  const [formData, setFormData] = useState<FormData>({
+    spotifyLink: '',
+    height: 0,
+    weight: 0,
+    goal: 'maintainWeight',
+    workoutDays: 0,
+    age: 0,
+  });
 
   useEffect(() => {
-    const fetchSettings = async () => {
-      try {
-        const response = await fetch('/api/settings');
-        if (response.ok) {
-          const settings = await response.json();
-          setSpotifyLink(settings.spotifyLink || '');
-          setHeight(settings.height?.toString() || '');
-          setWeight(settings.weight?.toString() || '');
-          setGoal(settings.goal || '');
-          setWorkoutDays(settings.workoutDays?.toString() || '');
-          setAge(settings.age?.toString() || '');
-        } else {
-          throw new Error('Failed to fetch settings');
-        }
-      } catch (error) {
-        console.error('Error fetching settings:', error);
-        toast.error("Failed to update settings");
-      } finally {
-        setIsLoading(false);
-      }
-    };
+    if (settingsData && 'data' in settingsData && settingsData.data) {
+      setFormData({
+        spotifyLink: settingsData.data.spotifyLink || '',
+        height: settingsData.data.height || 0,
+        weight: settingsData.data.weight || 0,
+        goal: (settingsData.data.goal as Goal) || 'maintainWeight',
+        workoutDays: settingsData.data.workoutDays || 0,
+        age: settingsData.data.age || 0,
+      });
+    }
+  }, [settingsData]);
 
-    fetchSettings();
-  }, [toast]);
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { id, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [id]: id === 'spotifyLink' ? value : value === '' ? null : Number(value),
+    }));
+  };
+
+  const handleSelectChange = (value: string) => {
+    setFormData(prev => ({ ...prev, goal: value as Goal }));
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setIsLoading(true);
     try {
-      const response = await fetch('/api/settings', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          spotifyLink,
-          height: parseFloat(height),
-          weight: parseFloat(weight),
-          goal,
-          workoutDays: parseInt(workoutDays),
-          age: parseInt(age),
-        }),
+      await updateSettings.mutateAsync({
+        spotifyLink: formData.spotifyLink,
+        height: formData.height,
+        weight: formData.weight,
+        goal: formData.goal,
+        workoutDays: formData.workoutDays,
+        age: formData.age,
       });
-
-      if (response.ok) {
-        toast.success("Saved settings successfully!");
-      } else {
-        throw new Error('Failed to save settings');
-      }
     } catch (error) {
-      console.error('Error saving settings:', error);
-      toast.error("Failed to update settings");
-    } finally {
-      setIsLoading(false);
+      console.error('Error updating settings:', error);
     }
   };
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="max-w-screen-2xl mx-auto w-full pb-10">
+        <Card className="border-none drop-shadow-sm">
+          <CardHeader>
+            <Skeleton className="h-8 w-48" />
+          </CardHeader>
+          <CardContent>
+            <div className="h-[500px] w-full flex items-center justify-center">
+              <Loader2 className="size-6 text-slate-400 animate-spin" />
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
   }
 
   return (
@@ -88,8 +104,8 @@ const Settings = () => {
           <Input
             type="text"
             id="spotifyLink"
-            value={spotifyLink}
-            onChange={(e) => setSpotifyLink(e.target.value)}
+            value={formData.spotifyLink}
+            onChange={handleChange}
             placeholder="https://open.spotify.com/playlist/..."
             className="mt-1"
           />
@@ -103,8 +119,8 @@ const Settings = () => {
           <Input
             type="number"
             id="height"
-            value={height}
-            onChange={(e) => setHeight(e.target.value)}
+            value={formData.height ?? ''}
+            onChange={handleChange}
             className="mt-1"
           />
         </div>
@@ -115,8 +131,8 @@ const Settings = () => {
           <Input
             type="number"
             id="weight"
-            value={weight}
-            onChange={(e) => setWeight(e.target.value)}
+            value={formData.weight ?? ''}
+            onChange={handleChange}
             className="mt-1"
           />
         </div>
@@ -124,12 +140,15 @@ const Settings = () => {
           <label htmlFor="goal" className="block text-sm font-medium text-gray-700">
             Goal
           </label>
-          <Select value={goal} onValueChange={setGoal}>
+          <Select value={formData.goal} onValueChange={handleSelectChange}>
             <SelectTrigger>
               <SelectValue placeholder="Select a goal" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="mildWeightGain">Mild Weight Gain</SelectItem>
+              <SelectItem value="weightGain">Weight Gain</SelectItem>
+              <SelectItem value="maintainWeight">Maintain Weight</SelectItem>
+              <SelectItem value="mildWeightLoss">Mild Weight Loss</SelectItem>
               <SelectItem value="weightLoss">Weight Loss</SelectItem>
             </SelectContent>
           </Select>
@@ -141,8 +160,8 @@ const Settings = () => {
           <Input
             type="number"
             id="workoutDays"
-            value={workoutDays}
-            onChange={(e) => setWorkoutDays(e.target.value)}
+            value={formData.workoutDays ?? ''}
+            onChange={handleChange}
             className="mt-1"
           />
         </div>
@@ -153,14 +172,14 @@ const Settings = () => {
           <Input
             type="number"
             id="age"
-            value={age}
-            onChange={(e) => setAge(e.target.value)}
+            value={formData.age ?? ''}
+            onChange={handleChange}
             className="mt-1"
           />
         </div>
 
-        <Button type="submit" disabled={isLoading}>
-          {isLoading ? 'Saving...' : 'Save Settings'}
+        <Button type="submit" disabled={updateSettings.isPending}>
+          {updateSettings.isPending ? 'Saving...' : 'Save Settings'}
         </Button>
       </form>
     </div>

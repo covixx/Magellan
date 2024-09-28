@@ -2,89 +2,76 @@ import { Hono } from "hono";
 import { z } from "zod";
 import { db } from "@/db/drizzle";
 import { userSettings } from "@/db/schema";
-import { zValidator } from "@hono/zod-validator";
+import { clerkMiddleware, getAuth } from "@hono/clerk-auth";
 import { eq } from "drizzle-orm";
-import { getAuth } from "@hono/clerk-auth";
-
-const app = new Hono();
+import { zValidator } from "@hono/zod-validator";
+import { createId } from "@paralleldrive/cuid2";
 
 const settingsSchema = z.object({
   spotifyLink: z.string().url().optional(),
-  height: z.number().positive(),
-  weight: z.number().positive(),
-  goal: z.enum(['mildWeightGain', 'weightLoss']),
-  workoutDays: z.number().min(0).max(7),
-  age: z.number().positive(),
+  height: z.number().min(0).optional(),
+  weight: z.number().min(0).optional(),
+  goal: z.enum(["mildWeightGain", "weightLoss", "maintainWeight", "mildWeightLoss", "weightGain"]).optional(),
+  workoutDays: z.number().min(0).max(7).optional(),
+  age: z.number().min(0).optional(),
 });
 
-app.get('/', async (c) => {
-  const auth = getAuth(c);
-  if (!auth) {
-    return c.json({ error: "Unauthorized" }, 401);
-  }
-  const userId = auth.userId;
-  if (!userId) {
-    return c.json({ error: "Unauthorized" }, 401);
-  }
-  
-  const settings = await db.select().from(userSettings).where(eq(userSettings.userId, userId)).execute();
-  return c.json(settings[0] || {});
-});
+const app = new Hono()
+  .get("/",
+    clerkMiddleware(),
+    async (c) => {
+      const auth = getAuth(c);
+      if (!auth?.userId) {
+        return c.json({ error: "Unauthorized" }, 401);
+      }
 
-app.post('/', zValidator('json', settingsSchema), async (c) => {
-  const auth = getAuth(c);
-  if (!auth) {
-    return c.json({ error: "Unauthorized" }, 401);
-  }
-  const userId = auth.userId;
-  if (!userId) {
-    return c.json({ error: "Unauthorized" }, 401);
-  }
+      const data = await db
+        .select()
+        .from(userSettings)
+        .where(eq(userSettings.userId, auth.userId))
+        .limit(1);
 
-  const { spotifyLink, height, weight, goal, workoutDays, age } = c.req.valid('json');
+      if (data.length === 0) {
+        return c.json({ data: null });
+      }
 
-  const bmr = calculateBMR(weight, height, age);
-  const tdee = calculateTDEE(bmr, workoutDays);
-  const maxCalories = calculateMaxCalories(tdee, goal);
+      return c.json({ data: data[0] });
+    }
+  )
+  .post("/",
+    clerkMiddleware(),
+    zValidator("json", settingsSchema),
+    async (c) => {
+      const auth = getAuth(c);
+      const values = c.req.valid("json");
 
-  const newSettings = {
-    userId,
-    spotifyLink,
-    height,
-    weight,
-    goal,
-    workoutDays,
-    age,
-    maxCalories,
-  };
+      if (!auth?.userId) {
+        return c.json({ error: "Unauthorized" }, 401);
+      }
 
-  await db.insert(userSettings).values(newSettings).onConflictDoUpdate({
-    target: userSettings.userId,
-    set: newSettings,
-  });
+      const existingSettings = await db
+        .select()
+        .from(userSettings)
+        .where(eq(userSettings.userId, auth.userId))
+        .limit(1);
 
-  return c.json(newSettings);
-});
-function calculateBMR(weight: number, height: number, age: number): number {
-  // Mifflin-St Jeor Equation
-  return 10 * weight + 6.25 * height - 5 * age + 5;
-}
+      let data;
 
-function calculateTDEE(bmr: number, workoutDays: number): number {
-  // Activity multiplier based on workout days
-  const activityMultiplier = 1.2 + (workoutDays * 0.05);
-  return bmr * activityMultiplier;
-}
+      if (existingSettings.length === 0) {
+        [data] = await db.insert(userSettings).values({
+ 
+          userId: auth.userId,
+          ...values,
+        }).returning();
+      } else {
+        [data] = await db.update(userSettings)
+          .set(values)
+          .where(eq(userSettings.userId, auth.userId))
+          .returning();
+      }
 
-function calculateMaxCalories(tdee: number, goal: string): number {
-  switch (goal) {
-    case 'mildWeightGain':
-      return tdee + 300;
-    case 'weightLoss':
-      return tdee - 500;
-    default:
-      return tdee;
-  }
-}
+      return c.json({ data });
+    }
+  );
 
 export default app;
