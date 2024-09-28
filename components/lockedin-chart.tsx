@@ -82,8 +82,8 @@ export function Component({ data }: { data: { date: string; id: string; time: nu
           <BarChart
             data={chartData}
             margin={{
-              top: 20,
-              right: 30,
+              top: 30,
+              right: 20,
               left: 20,
               bottom: 5,
             }}
