@@ -31,7 +31,7 @@ export const Header = () => {
         <header className={`px-4 py-5 lg:px-12 pb-6 transition-colors ${
             theme === 'dark' 
             ? 'bg-gradient-to-b from-[#232931] to-[#1c1f26]' 
-            : 'bg-gradient-to-b from-blue-700 to-blue-400'
+            : 'bg-gradient-to-b from-zinc-600 to-zinc-500'
         }`}>
             <div className="max-w-screen-2xl mx-auto">
                 <div className="w-full flex items-center justify-between mb-8">

@@ -115,13 +115,13 @@ const { theme, setTheme } = useTheme();
   }
 
    return (
-    <Card className="w-full h-[72vh] flex flex-col shadow-none border-none ">
+    <Card className="w- h-[36.5vh] flex flex-col shadow-2xl ">
       <CardHeader className="flex-shrink-0">
         <CardTitle className={`text-2xl ${theme === 'dark' ? 'text-gray-100' : 'text-gray-700'} font-semibold`}>
           Pending Tasks
         </CardTitle>
       </CardHeader>
-      <CardContent className=" overflow-y-auto p-4 scrollbar-hide">
+      <CardContent className=" p-4 scrollbar-hide">
         {uncheckedTasks.length > 0 ? (
           <ul className="space-y-4">
             {uncheckedTasks.map((task, index) => (

@@ -40,14 +40,14 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="bg-inherit overflow-hidden min-h-screen p-6">
+    <div className="bg-inherit overflow-hidden min-h-screen p-6 ">
       <div className="grid grid-cols-3 gap-16 ">
         {/* Left column: Unchecked Tasks, Today's Habits, and Weekly Time Chart */}
         <div className="col-span-2 space-y-6">
-          <div className="bg-gray-800 rounded-lg p-4 max-h-[38.5vh] overflow-y-hidden">
+          <div className=" rounded-lg p-0 pt-4 max-h-[36.5vh] overflow-y-hidden shadow-xl">
             <UncheckedTasks />
           </div>
-          <div className="bg-gray-800 rounded-lg p-4 grid grid-cols-3 gap-x-5">
+          <div className=" rounded-lg p-4 grid grid-cols-3 gap-x-5">
             <div>
               <TodayHabits />
             </div>
@@ -57,7 +57,7 @@ export default function Dashboard() {
               <MuscleGroupCharts />
             </div>
             <div>
-              <div className="bg-gray-800 rounded-lg">
+              <div className="rounded-lg">
                 <NutritionRadialChart />
               </div>
             </div>
@@ -66,12 +66,12 @@ export default function Dashboard() {
 
         {/* Right column: Muscle Groups and additional card */}
         <div className="space-y-6">
-          <div className="bg-gray-800 rounded-lg p-4 mx-12 mr-16">
+          <div className=" rounded-lg p-4 mx-12 mr-16">
             {timeData && <ChartComponent data={timeData} />}
           </div>
           {/* New card added below MuscleGroupCharts */}
-          <div className="bg-gray-800 rounded-lg p-4 mx-12 mr-16">
-            <Card className="w-72 h-80 relative">
+          <div className=" rounded-lg p-4 mx-12 mr-16 pt-0">
+            <Card className="w-72 h-80 relative shadow-lg">
               <CardHeader>
                 <CardTitle className='flex justify-center font-extrabold'>Lock In</CardTitle>
                 <CardDescription className='flex justify-center italic'> Take control. </CardDescription>
