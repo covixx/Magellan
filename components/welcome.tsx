@@ -51,11 +51,7 @@ const handleSwitchChange = () => {
                     />
                     
                 </Button>
-                <div className="ml-auto flex items-center">
-                <Label htmlFor="lock-in" className="mr-2 font-semibold justify-normal ">Lock In</Label>
-                    <Switch id="lock-in" checked={isSwitchOn} onCheckedChange={handleSwitchChange} />
-                    
-                </div>
+               
             </div>
            
         </div>
