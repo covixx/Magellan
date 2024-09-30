@@ -12,7 +12,7 @@ import { useCreateMeal } from '@/features/nutrition/api/use-create-meals';
 import { useGetMeals } from '@/features/nutrition/api/use-get-meals';
 import { Loader2 } from "lucide-react";
 import { MealForm } from './meal-form'; // Assuming MealForm is in the same directory
-
+import { useUser } from "@clerk/nextjs"; 
 type MealInput = {
   food: string;
   calories: number;
@@ -35,15 +35,21 @@ export function NewMealSheet() {
   const [open, setOpen] = useState(false);
   const createMealMutation = useCreateMeal();
   const { data: meals, isLoading: mealsLoading } = useGetMeals();
-
+  const { user } = useUser();
   const handleSubmit = (mealInput: MealInput) => {
-    createMealMutation.mutate(mealInput, {
+    if (user?.id) {
+      const mealwithuserid = {
+        ...mealInput,
+        userId: user.id
+      };
+    
+    createMealMutation.mutate(mealwithuserid, {
       onSuccess: () => {
         setOpen(false);
       },
     });
   };
-
+}
   const handleQuickAdd = (meal: ApiMeal) => {
     const mealInput: MealInput = {
       food: meal.name,
@@ -52,8 +58,14 @@ export function NewMealSheet() {
       proteins: meal.protein,
       fats: meal.fats,
     };
-    createMealMutation.mutate(mealInput);
+    if (user?.id) {
+      const mealwithuserid = {
+        ...mealInput,
+        userId: user.id
+      };
+    createMealMutation.mutate(mealwithuserid);
   };
+}
   const uniqueMeals = meals?.slice(0, 100)
   .filter((meal, index, self) =>
     index === self.findIndex((m) => m.name === meal.name)

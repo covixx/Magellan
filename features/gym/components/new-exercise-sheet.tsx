@@ -1,58 +1,54 @@
-import { z } from "zod";
-import {
-    Sheet,
-    SheetContent,
-    SheetDescription,
-    SheetHeader,
-    SheetTitle,
-} from "@/components/ui/sheet";
-import { ExerciseForm } from "./exercise-form";
-import { useNewExercise } from "../hooks/use-new-exercise";
-import { useCreateExercise } from "../api/use-create-exercise";
+import React from 'react';
+import { useForm } from 'react-hook-form';
+import { useCreateExercise } from '../api/use-create-exercise';
+import { useUser } from "@clerk/nextjs";  // Import the useUser hook
 
-const formSchema = z.object({
-    exercise: z.string(),
-    sets: z.number(),
-    reps: z.number(),
-    weight: z.number(),
-    muscle: z.string(),
-});
+// Assuming you have a Button and Input component
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 
-type FormValues = z.infer<typeof formSchema>;
+type FormData = {
+  exercise: string;
+  sets: number;
+  reps: number;
+  weight: number;
+  muscle: string;
+};
 
 export const NewExerciseSheet = () => {
-    const { isOpen, onClose } = useNewExercise();
-    const mutation = useCreateExercise();
+  const { register, handleSubmit, reset } = useForm<FormData>();
+  const mutation = useCreateExercise();
+  const { user } = useUser();  // Get the current user
 
-    const onSubmit = (values: FormValues) => {
-        mutation.mutate(values, {
-            onSuccess: () => {
-                onClose();
-            }
-        });
-    };
+  const onSubmit = (data: FormData) => {
+    if (user?.id) {
+      const exerciseWithUserId = {
+        ...data,
+        userId: user.id
+      };
 
-    return (
-        <Sheet open={isOpen} onOpenChange={onClose}> 
-            <SheetContent className="space-y-4">
-                <SheetHeader>
-                    <SheetTitle>Log Workout</SheetTitle>
-                    <SheetDescription>
-                        Enter details
-                    </SheetDescription>
-                </SheetHeader>
-                <ExerciseForm 
-                    onSubmit={onSubmit} 
-                    disabled={mutation.isPending}
-                    defaultValues={{
-                        exercise: "",
-                        sets: 0,
-                        reps: 0,
-                        weight: 0,
-                        muscle: "",
-                    }}
-                />
-            </SheetContent>
-        </Sheet>
-    );
+      mutation.mutate(exerciseWithUserId, {
+        onSuccess: () => {
+          console.log('Exercise added successfully');
+          reset();  // Reset the form after successful submission
+        },
+        onError: (error) => {
+          console.error('Error adding exercise:', error);
+        }
+      });
+    } else {
+      console.error('User ID is not available');
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <Input {...register('exercise')} placeholder="Exercise name" required />
+      <Input {...register('sets', { valueAsNumber: true })} placeholder="Sets" type="number" required />
+      <Input {...register('reps', { valueAsNumber: true })} placeholder="Reps" type="number" required />
+      <Input {...register('weight', { valueAsNumber: true })} placeholder="Weight" type="number" required />
+      <Input {...register('muscle')} placeholder="Muscle group" required />
+      <Button type="submit">Add Exercise</Button>
+    </form>
+  );
 };

@@ -70,7 +70,7 @@ export default function Dashboard() {
             {timeData && <ChartComponent data={timeData} />}
           </div>
           {/* New card added below MuscleGroupCharts */}
-          <div className=" rounded-lg p-4 mx-12 mr-16 pt-0">
+          <div className=" rounded-lg p-4 mx-12 mr-16 pt-0  ">
             <Card className="w-72 h-80 relative shadow-lg">
               <CardHeader>
                 <CardTitle className='flex justify-center font-extrabold'>Lock In</CardTitle>

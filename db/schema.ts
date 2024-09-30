@@ -22,6 +22,7 @@ export const nutrition = pgTable("nutrition", {
     carbs: integer("carbs").notNull(),
     proteins: integer("proteins").notNull(),    
     fats: integer("fats").notNull(),
+    userId: text("user_id").notNull(),
 });
 
 export const insertnutritionschema = createInsertSchema(nutrition);
@@ -34,6 +35,7 @@ export const gym = pgTable("gym", {
     reps: integer("reps").notNull(),
     weight: integer("weights").notNull(),
     muscle: text("muscle").notNull(),    
+    userId: text("user_id").notNull(),
 });
 
 export const insertgymschema = createInsertSchema(gym);
@@ -42,6 +44,7 @@ export const lockingin = pgTable("lockingin", {
     date: timestamp("date", {mode: "date"}).notNull(),
     id: text("id").primaryKey(),
     focustime: integer("focustime"),
+    userId: text("user_id").notNull(),
 });
 
 export const insertlockingschema = createInsertSchema(lockingin);

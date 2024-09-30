@@ -4,11 +4,12 @@ import { Textarea } from "@/components/ui/textarea";
 import { GymTable } from "@/components/gym-table";  // Assuming GymTable is in a separate file
 import { columns, Workout } from "@/app/(dashboard)/gym/columns";  // Assuming columns and Workout type are defined in columns.ts
 import { useCreateExercise } from "@/features/gym/api/use-create-exercise";
+import { useUser } from "@clerk/nextjs";
  const WorkoutParser = () => {
  const mutation = useCreateExercise();
   const [workouts, setWorkouts] = useState<Workout[]>([]);
   const [inputText, setInputText] = useState('');
-
+  const { user } = useUser();
   const parseWorkout = (text: string): Workout[] => {
     const lines = text.trim().split('\n').filter(line => line !== '');
     return lines.map((line, index) => {
@@ -72,14 +73,23 @@ import { useCreateExercise } from "@/features/gym/api/use-create-exercise";
     const newWorkouts = parseWorkout(inputText);
     
     newWorkouts.forEach((workout) => {
-      mutation.mutate(workout, {
-        onSuccess: () => {
-          console.log('Workout added to DB:', workout);
-        },
-        onError: (error) => {
-          console.error('Error adding workout:', error);
-        },
-      });
+      if (user?.id) {
+        const workoutWithUserId = {
+          ...workout,
+          userId: user.id  // Add the userId to the workout data
+        };
+        
+        mutation.mutate(workoutWithUserId, {
+          onSuccess: () => {
+            console.log('Workout added to DB:', workoutWithUserId);
+          },
+          onError: (error) => {
+            console.error('Error adding workout:', error);
+          },
+        });
+      } else {
+        console.error('User ID is not available');
+      }
     });
 
     setWorkouts([...workouts, ...newWorkouts]);

@@ -1,5 +1,5 @@
 {
-  "id": "87b9fb51-66af-414e-a759-871784f1ef07",
+  "id": "60e345e1-1190-40f8-80a7-d0713b61d87b",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "5",
   "dialect": "pg",
@@ -46,6 +46,12 @@
         },
         "muscle": {
           "name": "muscle",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
           "type": "text",
           "primaryKey": false,
           "notNull": true
@@ -119,6 +125,12 @@
           "type": "integer",
           "primaryKey": false,
           "notNull": false
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
         }
       },
       "indexes": {},
@@ -169,6 +181,12 @@
         "fats": {
           "name": "fats",
           "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "text",
           "primaryKey": false,
           "notNull": true
         }

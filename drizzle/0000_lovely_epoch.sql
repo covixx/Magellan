@@ -5,7 +5,8 @@ CREATE TABLE IF NOT EXISTS "gym" (
 	"sets" integer NOT NULL,
 	"reps" integer NOT NULL,
 	"weights" integer NOT NULL,
-	"muscle" text NOT NULL
+	"muscle" text NOT NULL,
+	"user_id" text NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "habits" (
@@ -19,7 +20,8 @@ CREATE TABLE IF NOT EXISTS "habits" (
 CREATE TABLE IF NOT EXISTS "lockingin" (
 	"date" timestamp NOT NULL,
 	"id" text PRIMARY KEY NOT NULL,
-	"focustime" integer
+	"focustime" integer,
+	"user_id" text NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "nutrition" (
@@ -29,7 +31,8 @@ CREATE TABLE IF NOT EXISTS "nutrition" (
 	"calories" integer NOT NULL,
 	"carbs" integer NOT NULL,
 	"proteins" integer NOT NULL,
-	"fats" integer NOT NULL
+	"fats" integer NOT NULL,
+	"user_id" text NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "todo" (

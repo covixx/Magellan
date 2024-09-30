@@ -6,6 +6,7 @@ type MealInput = {
   carbs: number;
   proteins: number;
   fats: number;
+  userId: string;
 };
 export const useCreateMeal = () => {
   const queryClient = useQueryClient();
@@ -13,6 +14,7 @@ export const useCreateMeal = () => {
   return useMutation({
     mutationFn: (data: MealInput) => client.api.nutrition.$post({
       json: {
+        userId: data.userId,
         food: data.food,
         calories: Math.floor(data.calories),
         carbs: Math.floor(data.carbs),
